@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "RangeShifter": {
+      "commandName": "Project",
+      "commandLineArgs": "Kontaktperson.before.al"
+    }
+  }
+}

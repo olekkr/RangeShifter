@@ -10,14 +10,15 @@ namespace RangeShifter
 
     class Program
     {
-        const int shiftingCoefficient = 70443950;
-
-
+        const int shiftingNum = 70443950;
+        const string prefix = "BGo";
 
         static void Main(string[] args)
         {
-            Dictionary<String[], String> replacements;
-            string prefix = "BGo";
+            //Dictionary<String, String[]> replacements;
+            List<String[]> replacements = new List<String[]> { };
+            List<String[]> tabelReps = new List<String[]> { };
+
 
 
             if (args.Length == 0 || args.Length > 2)
@@ -43,40 +44,40 @@ namespace RangeShifter
             {
                 //fix includes  Regex.Match(String, Int32)
                 string nText = text;
-                for (Match match = Regex.Match(nText, "{|(?mx)^(\\w{1,30}) \\s+? (\\d{1,9}) \\s+? (\\w{1,30}|\\\"\\S{1,30}\\\") #Keyword ID ObjectName etc"); match.Success; match = match.NextMatch())
+                for (Match match = Regex.Match(nText, "(?mx)^(\\w{1,30}) \\s+ (\\d{1,9}) \\s+ (\\w{1,30}|\\\"\\S{1,30}\\\") #Keyword ID ObjectName etc"); match.Success; match = match.NextMatch())
                 {
-                    Console.WriteLine(match.Captures[0]);
-                    Console.WriteLine(match.Index);
-
-                    if (match.Captures[0].ToString().Equals("{")) // skip to "blockdepth" 0 and shorten text
+                    Console.WriteLine(("match.Groups[0]", match.Groups[1]));
+                    if (match.Groups[1].ToString().Equals("table"))
                     {
-                        int i = 1;
-                        int idx = 0;
-                        foreach (char chr in nText.Substring(match.Index))
-                        {
-                            if (chr == '}'){ i -= 1; }
-                            else if (chr == '{'){ i += 1; }
-                            if (i == 0)
-                            {
-                                Console.WriteLine(("a", i));
-                                //Console.WriteLine(idx-1);
-                                nText = nText.Substring(idx-1);
-                                break;
-                            }
-                            idx += 1;
-                        }
+                        tabelReps.Add(new String[] { match.Groups[1].ToString(), match.Groups[2].ToString(), match.Groups[3].ToString() });
                     }
-                    //else // edit 
-                    //{
-                    //    Console.WriteLine(1);
-                    //   Console.Title = 1;
-                    //}
-
-
+                    else
+                    {
+                        replacements.Add(new String[] { match.Groups[1].ToString(), match.Groups[2].ToString(), match.Groups[3].ToString() });
+                    }
+                }
+                foreach (string[] tabelElem in tabelReps) {
+                    if (tabelElem[2][0].Equals("\""))
+                    {
+                        
+                    }
+                    else {
+                        nText = Regex.Replace(nText, ("table\\s+" + tabelElem[1] + "\\s+" + tabelElem[2]), ("table " + (int.Parse(tabelElem[1]) + shiftingNum).ToString() + " " + prefix + tabelElem[2]));
+                        nText = Regex.Replace(nText, ("Record\\s+" + tabelElem[2]), ("Record " + prefix + tabelElem[2]));
+                    }
+                }
+                foreach (string[] elem in replacements)
+                {
+                    if (elem[2][0].Equals("\"")) { //if ""-mode
+                        //nText = Regex.Replace(nText, (elem[0] + "\\s+" + elem[1] + "\\s+" + elem[2]), (elem[0] + (int.Parse(elem[1]) + shiftingNum).ToString() + " " + prefix + elem[2]));
+                        //nText = Regex.Replace(nText, (elem[0] + "\\s+" + elem[2]), elem[0] + " " + prefix + elem[2]); 
+                    }
+                    else {
+                        nText = Regex.Replace(nText, (elem[0] + "\\s+" + elem[1] + "\\s+" + elem[2]), (elem[0] + (int.Parse(elem[1]) + shiftingNum).ToString() + " " + prefix + elem[2]));
+                        nText = Regex.Replace(nText, (elem[0] + "\\s+" + elem[2]), elem[0] + " " + prefix + elem[2]);
+                    }
 
                 }
-
-
             }
         }
     }
