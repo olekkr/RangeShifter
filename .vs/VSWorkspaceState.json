@@ -1,8 +1,10 @@
 {
   "ExpandedNodes": [
     "",
-    "\\RangeShifter"
+    "\\RangeShifter",
+    "\\RangeShifter\\bin",
+    "\\RangeShifter\\bin\\Debug",
+    "\\RangeShifter\\bin\\Debug\\netcoreapp3.1"
   ],
-  "SelectedNode": "\\RangeShifter\\RangeShifter.csproj",
   "PreviewInSolutionExplorer": false
 }

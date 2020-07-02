@@ -1,10 +1,10 @@
-table 70494001 BGoImported_Kontakt
+table 50051 Imported_Kontakthhhh
 {
     DataClassification = ToBeClassified;
 
     fields
     {
-        field(50001; Imported_KontaktNr; Code[10]) { }
+        field(50001; Imported_KontakthhhhNr; Code[10]) { }
         field(50002; Imported_BrugerKontaktNr; Code[10]) { }
         field(50003; Imported_KundeNr; Code[10]) { }
         field(50004; Imported_LeverandoerNr; Code[20]) { }
@@ -14,14 +14,17 @@ table 70494001 BGoImported_Kontakt
     }
     keys
     {
-        key(PK; Imported_KontaktNr)
+        key(PK; Imported_KontakthhhhNr)
         {
             Clustered = true;
         }
     }
 }
 
-tableextension 70494001 BGoExtContact extends Contact
+
+
+
+tableextension 50051 ExtContactee extends Contact
 {
     fields
     {
@@ -75,7 +78,7 @@ tableextension 70494001 BGoExtContact extends Contact
     end;
 }
 
-codeunit 70494007 "BGoPost-Kontakt"
+codeunit 50057 "Post-Kontakt"
 {
     TableNo = "Data Exch.";
     trigger OnRun();
@@ -92,8 +95,8 @@ codeunit 70494007 "BGoPost-Kontakt"
 
     local procedure CreateContact();
     var
-        mImCont_C: Record BGoImported_Kontakt;
-        mImCont_V: Record BGoImported_Kontakt;
+        mImCont_C: Record Imported_Kontakthhhh;
+        mImCont_V: Record Imported_Kontakthhhh;
     begin
         with mImCont_C do begin
             SetFilter(Imported_KundeNr, '<>%1', '');
@@ -112,7 +115,7 @@ codeunit 70494007 "BGoPost-Kontakt"
         end;
     end;
 
-    local procedure CreateContactCustomer(ImCont: Record BGoImported_Kontakt)
+    local procedure CreateContactCustomer(ImCont: Record Imported_Kontakthhhh)
     var
         mContBusRel: Record "Contact Business Relation";
         mCust: Record Customer;
@@ -126,16 +129,16 @@ codeunit 70494007 "BGoPost-Kontakt"
                 mContBusRel.FindFirst();
             end;
 
-            InsertNewContactPerson(ImCont.Imported_KontaktNr, ImCont.Imported_KundeNr, ImCont, mContBusRel."Contact No.");
+            InsertNewContactPerson(ImCont.Imported_KontakthhhhNr, ImCont.Imported_KundeNr, ImCont, mContBusRel."Contact No.");
 
             if ImCont.Imported_BrugerKontaktNr = '1' then begin
-                mCust.VALIDATE("Primary Contact No.", ImCont.Imported_KontaktNr);
+                mCust.VALIDATE("Primary Contact No.", ImCont.Imported_KontakthhhhNr);
                 mCust.MODIFY;
             end;
         end;
     end;
 
-    local procedure CreateContactVendor(ImCont: Record BGoImported_Kontakt)
+    local procedure CreateContactVendor(ImCont: Record Imported_Kontakthhhh)
     var
         mContBusRel: Record "Contact Business Relation";
         mVend: Record Vendor;
@@ -149,16 +152,16 @@ codeunit 70494007 "BGoPost-Kontakt"
                 mContBusRel.FindFirst();
             end;
 
-            InsertNewContactPerson(ImCont.Imported_KontaktNr, ImCont.Imported_LeverandoerNr, ImCont, mContBusRel."Contact No.");
+            InsertNewContactPerson(ImCont.Imported_KontakthhhhNr, ImCont.Imported_LeverandoerNr, ImCont, mContBusRel."Contact No.");
 
             if ImCont.Imported_BrugerKontaktNr = '1' then begin
-                mVend.VALIDATE("Primary Contact No.", ImCont.Imported_KontaktNr);
+                mVend.VALIDATE("Primary Contact No.", ImCont.Imported_KontakthhhhNr);
                 mVend.MODIFY;
             end;
         end;
     end;
 
-    local procedure InsertNewContactPerson(ContactNo: Code[20]; CustNo: Code[20]; ImCont: Record BGoImported_Kontakt; BusRelContactNo: Code[20]);
+    local procedure InsertNewContactPerson(ContactNo: Code[20]; CustNo: Code[20]; ImCont: Record Imported_Kontakthhhh; BusRelContactNo: Code[20]);
     var
         mContact: Record Contact;
         mContact2: Record Contact;

@@ -2,7 +2,7 @@
   "profiles": {
     "RangeShifter": {
       "commandName": "Project",
-      "commandLineArgs": "Kontaktperson.before.al"
+      "commandLineArgs": "\"New folder\" \"New folder1\""
     }
   }
 }
