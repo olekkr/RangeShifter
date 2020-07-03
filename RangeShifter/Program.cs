@@ -136,11 +136,16 @@ namespace RangeShifter
                 }
             }
 
-            public string toSCV()
+            public string toCSV()
             {
-                string scv
-                for 
+                string csv = $"Keyword,Objectnumber,Objectname";
 
+                foreach(TextElement textElement in textElements)
+                {
+                    csv += $"\n{textElement.m_keyword},{textElement.m_objectNumber},{textElement.m_objectName}";
+
+                }
+                return csv;
             }
         }
 
