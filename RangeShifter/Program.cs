@@ -135,6 +135,13 @@ namespace RangeShifter
                     textElement.replace(sDir);
                 }
             }
+
+            public string toSCV()
+            {
+                string scv
+                for 
+
+            }
         }
 
         static void doForEachFile(string sDir, Action<String> func)
