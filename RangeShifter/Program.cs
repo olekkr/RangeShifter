@@ -3,6 +3,8 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Collections.Generic;
 using System.Text;
+using System.Xml.Serialization;
+using System.Data;
 
 namespace RangeShifter
 {
@@ -23,17 +25,21 @@ namespace RangeShifter
 
                 return;
             }
-
+            
 
             TextElementCollection t = new TextElementCollection();
 
+
             Action<string> collectHandler = t.collectAll;
-            Action<string> replaceHandler = t.replaceAll;
-            Action<string> test = Console.WriteLine;
-            DirectoryCopy(args[0], args[1], true);
-            doForEachFile(args[0], test);
+            //Action<string> replaceHandler = t.replaceAll;
+            //Action<string> test = Console.WriteLine;
+            //DirectoryCopy(args[0], args[1], true);
+            //doForEachFile(args[0], test);
             doForEachFile(args[0], collectHandler);
-            doForEachFile(args[1], replaceHandler);
+            t.importCSV("CSV_out.csv");
+            //doForEachFile(args[1], replaceHandler);
+
+            
 
             Console.In.ReadLine();
         }
@@ -45,14 +51,34 @@ namespace RangeShifter
             public String m_keyword;
             public int m_objectNumber;
             public String m_objectName;
-            public Boolean m_usesQuotes;
 
-            public TextElement(String keyword, int objectNumber, String objectName)
+            public int new_objectNumber;
+            public String new_objectName;
+
+            public Boolean m_usesQuotes;
+            public String m_path;
+
+            public TextElement(String keyword, int objectNumber, String objectName, String path)
             {
                 m_keyword = keyword;
                 m_objectNumber = objectNumber;
                 m_usesQuotes = objectName.StartsWith("\"");
                 m_objectName = objectName;
+                m_path = path;
+
+                new_objectNumber = newObjNum();
+                new_objectName = newObjName();
+            }
+
+            public TextElement(String path, String keyword, int objectNumber, String objectName, String newObjName, int newObjNumber)
+            {
+                m_keyword = keyword;
+                m_objectNumber = objectNumber;
+                m_usesQuotes = objectName.StartsWith("\"");
+                m_objectName = objectName;
+                m_path = path;
+                new_objectName = newObjName;
+                new_objectNumber = newObjNumber;
             }
 
             public String newObjName() // returns objName with prefix
@@ -71,21 +97,21 @@ namespace RangeShifter
                 return shiftingNum + m_objectNumber;
             }
 
-
+            
             public void replace(string sDir)
             {
                 string text = System.IO.File.ReadAllText(sDir);
                 // replace defenition
-                text = Regex.Replace(text, $"{m_keyword}\\s+{m_objectNumber}\\s+{m_objectName}", $"{m_keyword} {newObjNum()} {newObjName()}");
+                text = Regex.Replace(text, $"{m_keyword}\\s+{m_objectNumber}\\s+{m_objectName}", $"{m_keyword} {new_objectNumber} {new_objectName}");
 
                 // replace instantiation 
                 if (m_keyword == "table")
                 {
-                    text = Regex.Replace(text, $"Record\\s+{m_objectName}", $"Record {newObjName()}");
+                    text = Regex.Replace(text, $"Record\\s+{m_objectName}", $"Record {new_objectName}");
                 }
                 else
                 {
-                    text = Regex.Replace(text, $"{m_keyword}\\s+{m_objectName}", $"{m_keyword} {newObjName()}");
+                    text = Regex.Replace(text, $"{m_keyword}\\s+{m_objectName}", $"{m_keyword} {new_objectName}");
                 }
                 System.IO.File.WriteAllText(sDir, text);
             }
@@ -111,7 +137,7 @@ namespace RangeShifter
                 String nText = File.ReadAllText(sDir);
                 for (Match match = Regex.Match(nText, "(?mx)^(\\w{1,30}) \\s+ (\\d{1,9}) \\s+ (\\w{1,30}|\\\"\\S{1,30}\\\") #Keyword ID ObjectName etc"); match.Success; match = match.NextMatch())
                 {
-                    TextElement matchedElement = new TextElement(match.Groups[1].ToString(), int.Parse(match.Groups[2].ToString()), match.Groups[3].ToString());
+                    TextElement matchedElement = new TextElement(match.Groups[1].ToString(), int.Parse(match.Groups[2].ToString()), match.Groups[3].ToString(), sDir);
                     Boolean isADupe = false;
                     foreach (TextElement elem in textElements)
                     {
@@ -136,16 +162,30 @@ namespace RangeShifter
                 }
             }
 
-            public string toCSV()
+            
+
+            public void exportCSV(string sDir)
             {
-                string csv = $"Keyword,Objectnumber,Objectname";
+                string CSV = $"Path, Keyword, ObjectNumber, Objectname ->, newObjectNumber, newObjectName";
 
                 foreach(TextElement textElement in textElements)
                 {
-                    csv += $"\n{textElement.m_keyword},{textElement.m_objectNumber},{textElement.m_objectName}";
+                    CSV += $"\n{textElement.m_path}, {textElement.m_keyword}, {textElement.m_objectNumber}, {textElement.m_objectName}, {textElement.m_keyword}, {textElement.new_objectNumber}, {textElement.new_objectName}";
 
                 }
-                return csv;
+                File.WriteAllText(sDir, CSV);
+            }
+
+            public void importCSV(String sDir)
+            {
+                string CSV = File.ReadAllText(sDir);
+                String[] CSVArr = CSV.Split("\n");
+                textElements.Clear();
+                for (int i = 1; i < CSVArr.Length; i++)
+                { 
+                    String[] rowArr = CSVArr[i].Split(",");
+                    textElements.Add(new TextElement(rowArr[0].Trim(' '), rowArr[1].Trim(' '), int.Parse(rowArr[2].Trim(' ')), rowArr[3].Trim(' '), rowArr[4].Trim(' '), int.Parse(rowArr[5].Trim(' '))));
+                } 
             }
         }
 
