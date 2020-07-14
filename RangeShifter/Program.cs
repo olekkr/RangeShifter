@@ -1,10 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
-using System.Collections.Generic;
-using System.Text;
-using System.Xml.Serialization;
-using System.Data;
 
 namespace RangeShifter
 {
@@ -18,28 +15,72 @@ namespace RangeShifter
 
         static void Main(string[] args)
         {
-            if (args.Length != 2)
-            {
-                Console.WriteLine(args.Length);
-                Console.Error.Write("[ERROR] wrong number of args");
-
-                return;
-            }
-            
-
+            Console.Write(@"
+1 : collect [folder/file]
+2 : output [name]
+3 : input [file]
+4 : write [location]
+");
             TextElementCollection t = new TextElementCollection();
-
-
             Action<string> collectHandler = t.collectAll;
-            //Action<string> replaceHandler = t.replaceAll;
-            //Action<string> test = Console.WriteLine;
-            //DirectoryCopy(args[0], args[1], true);
-            //doForEachFile(args[0], test);
-            doForEachFile(args[0], collectHandler);
-            t.importCSV("CSV_out.csv");
-            //doForEachFile(args[1], replaceHandler);
+            Action<string> replaceHandler = t.replaceAll;
+            string inputLoc = "";
+            while (true)
+            {
+                String input = Console.ReadLine();
+                if (input.Length < 2)
+                {
+                    Console.WriteLine("Wrong input. try again");
+                    continue;
+                }
+                int caseN = int.Parse(input[0].ToString());
+                String rest = input.Substring(1).Trim();
+                
+                
+                
 
-            
+                switch (caseN)
+                {
+                    case 1:
+                        Console.WriteLine("collecting");
+                        doForEachFile(rest, collectHandler);
+                        inputLoc = rest;
+                        break;
+                    case 2:
+                        Console.WriteLine("outputting");
+                        t.exportCSV(rest);
+                        Console.WriteLine(rest);
+                        break;
+                    case 3:
+                        Console.WriteLine("inputting");
+                        t.importCSV(rest);
+                        break;
+                    case 4:
+                        if (inputLoc == "")
+                        {
+                            Console.WriteLine("source file is mising. enter it below\n");
+                            inputLoc = Console.ReadLine();
+                        }
+                        DirectoryCopy(inputLoc, rest, true);
+                        Console.WriteLine("writing");
+                        doForEachFile(rest, replaceHandler);
+                        break;
+
+                    default:
+                        Console.WriteLine("something went wrong");
+                        break;
+                }
+
+
+            }
+
+
+
+
+
+
+
+
 
             Console.In.ReadLine();
         }
@@ -70,7 +111,7 @@ namespace RangeShifter
                 new_objectName = newObjName();
             }
 
-            public TextElement(String path, String keyword, int objectNumber, String objectName, String newObjName, int newObjNumber)
+            public TextElement(String path, String keyword, int objectNumber, String objectName, int newObjNumber, String newObjName)
             {
                 m_keyword = keyword;
                 m_objectNumber = objectNumber;
@@ -85,7 +126,7 @@ namespace RangeShifter
             {
                 if (m_usesQuotes)
                 {
-                    return $"\"{prefix}{m_objectName.Substring(1, m_objectName.Length - 2)}\"";
+                    return $"{prefix}{m_objectName.Substring(1, m_objectName.Length - 2)}";
                 }
                 else
                 {
@@ -97,7 +138,7 @@ namespace RangeShifter
                 return shiftingNum + m_objectNumber;
             }
 
-            
+
             public void replace(string sDir)
             {
                 string text = System.IO.File.ReadAllText(sDir);
@@ -162,16 +203,15 @@ namespace RangeShifter
                 }
             }
 
-            
+
 
             public void exportCSV(string sDir)
             {
                 string CSV = $"Path, Keyword, ObjectNumber, Objectname ->, newObjectNumber, newObjectName";
 
-                foreach(TextElement textElement in textElements)
+                foreach (TextElement textElement in textElements)
                 {
-                    CSV += $"\n{textElement.m_path}, {textElement.m_keyword}, {textElement.m_objectNumber}, {textElement.m_objectName}, {textElement.m_keyword}, {textElement.new_objectNumber}, {textElement.new_objectName}";
-
+                    CSV += $"\n{textElement.m_path}, {textElement.m_keyword}, {textElement.m_objectNumber}, {textElement.m_objectName}, {textElement.new_objectNumber}, {textElement.new_objectName}";
                 }
                 File.WriteAllText(sDir, CSV);
             }
@@ -182,10 +222,25 @@ namespace RangeShifter
                 String[] CSVArr = CSV.Split("\n");
                 textElements.Clear();
                 for (int i = 1; i < CSVArr.Length; i++)
-                { 
+                {
                     String[] rowArr = CSVArr[i].Split(",");
-                    textElements.Add(new TextElement(rowArr[0].Trim(' '), rowArr[1].Trim(' '), int.Parse(rowArr[2].Trim(' ')), rowArr[3].Trim(' '), rowArr[4].Trim(' '), int.Parse(rowArr[5].Trim(' '))));
-                } 
+                    if (rowArr.Length != 6) { break; }
+                    TextElement matchedElement = new TextElement(rowArr[0].Trim(' '), rowArr[1].Trim(' '), int.Parse(rowArr[2].Trim(' ')), rowArr[3].Trim(' '), int.Parse(rowArr[4].Trim(' ')), rowArr[5].Trim(' '));
+                    //(String path, String keyword, int objectNumber, String objectName, int newObjNumber, String newObjName)
+                    Boolean isADupe = false;
+                    foreach (TextElement elem in textElements)
+                    {
+                        if (matchedElement == elem)
+                        {
+                            isADupe = true;
+                            break;
+                        }
+                    }
+                    if (!isADupe)
+                    {
+                        textElements.Add(matchedElement);
+                    }
+                }
             }
         }
 

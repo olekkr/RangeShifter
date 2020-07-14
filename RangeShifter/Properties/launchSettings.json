@@ -1,8 +1,7 @@
 {
   "profiles": {
     "RangeShifter": {
-      "commandName": "Project",
-      "commandLineArgs": "\"New folder\" \"New folder1\""
+      "commandName": "Project"
     }
   }
 }
