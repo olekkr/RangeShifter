@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using CommandLine;
+
 
 namespace RangeShifter
 {
@@ -13,73 +15,30 @@ namespace RangeShifter
         public const int shiftingNum = 70443950;
         public const string prefix = "BGo";
 
+        class Options
+        {
+            [Option('f', "force", HelpText = "Overrides dir, dose not output config file (config.csv)")]
+            public bool readOnly { get; set; }
+
+            [Option('C', "config-location", Default = "./config.csv", HelpText = "Location of intermediate configfile (default=config.csv)")]
+            public string configLoc { get; set; }
+
+            [Option('T', "target-directory", Default = "./", HelpText ="Target directory for copying, if directory dosent exist, it will copy it to that location")]
+            public string workingDirectory { get; set; }
+
+            
+
+
+        }
+
         static void Main(string[] args)
         {
-            Console.Write(@"
-1 : collect [folder/file]
-2 : output [name]
-3 : input [file]
-4 : write [location]
-");
+            
             TextElementCollection t = new TextElementCollection();
             Action<string> collectHandler = t.collectAll;
             Action<string> replaceHandler = t.replaceAll;
-            string inputLoc = "";
-            while (true)
-            {
-                String input = Console.ReadLine();
-                if (input.Length < 2)
-                {
-                    Console.WriteLine("Wrong input. try again");
-                    continue;
-                }
-                int caseN = int.Parse(input[0].ToString());
-                String rest = input.Substring(1).Trim();
-                
-                
-                
-
-                switch (caseN)
-                {
-                    case 1:
-                        Console.WriteLine("collecting");
-                        doForEachFile(rest, collectHandler);
-                        inputLoc = rest;
-                        break;
-                    case 2:
-                        Console.WriteLine("outputting");
-                        t.exportCSV(rest);
-                        Console.WriteLine(rest);
-                        break;
-                    case 3:
-                        Console.WriteLine("inputting");
-                        t.importCSV(rest);
-                        break;
-                    case 4:
-                        if (inputLoc == "")
-                        {
-                            Console.WriteLine("source file is mising. enter it below\n");
-                            inputLoc = Console.ReadLine();
-                        }
-                        DirectoryCopy(inputLoc, rest, true);
-                        Console.WriteLine("writing");
-                        doForEachFile(rest, replaceHandler);
-                        break;
-
-                    default:
-                        Console.WriteLine("something went wrong");
-                        break;
-                }
-
-
-            }
-
-
-
-
-
-
-
+            
+            
 
 
             Console.In.ReadLine();
