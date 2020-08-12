@@ -1,7 +1,13 @@
 {
   "profiles": {
     "RangeShifter": {
-      "commandName": "Project"
+      "commandName": "Project",
+      "commandLineArgs": "collect -t ok.zip",
+      "remoteDebugEnabled": false
+    },
+    "test write": {
+      "commandName": "Project",
+      "commandLineArgs": "write --source-dir=ok --output-dir=newfolder"
     }
   }
 }

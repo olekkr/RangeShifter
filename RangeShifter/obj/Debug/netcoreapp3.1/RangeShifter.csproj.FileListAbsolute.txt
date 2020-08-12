@@ -17,12 +17,12 @@ C:\dev\RangeShifter\RangeShifter\bin\Debug\netcoreapp3.1\RangeShifter.runtimecon
 C:\dev\RangeShifter\RangeShifter\bin\Debug\netcoreapp3.1\RangeShifter.runtimeconfig.dev.json
 C:\dev\RangeShifter\RangeShifter\bin\Debug\netcoreapp3.1\RangeShifter.dll
 C:\dev\RangeShifter\RangeShifter\bin\Debug\netcoreapp3.1\RangeShifter.pdb
+C:\dev\RangeShifter\RangeShifter\bin\Debug\netcoreapp3.1\CommandLine.dll
 C:\dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\RangeShifter.csprojAssemblyReference.cache
+C:\dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\RangeShifter.csproj.CoreCompileInputs.cache
 C:\dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\RangeShifter.AssemblyInfoInputs.cache
 C:\dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\RangeShifter.AssemblyInfo.cs
+C:\dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\RangeShifter.csproj.CopyComplete
 C:\dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\RangeShifter.dll
 C:\dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\RangeShifter.pdb
 C:\dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\RangeShifter.genruntimeconfig.cache
-C:\Dev\RangeShifter\RangeShifter\bin\Debug\netcoreapp3.1\CommandLine.dll
-C:\Dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\RangeShifter.csproj.CoreCompileInputs.cache
-C:\Dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\RangeShifter.csproj.CopyComplete

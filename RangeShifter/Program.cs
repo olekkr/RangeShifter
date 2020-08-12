@@ -1,205 +1,127 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text.RegularExpressions;
 using CommandLine;
+using FileParser;
+using System.IO.Compression;
+
 
 
 namespace RangeShifter
 {
-    //Range for table object ID numbers 	1 – 999,999,999
-    //Maximum number of characters in variable names 	30
+
 
     class Program
     {
-        public const int shiftingNum = 70443950;
-        public const string prefix = "BGo";
+        public static readonly int shiftingNum = 70443950;
+        public static readonly string prefix = "BGo";
 
-        class Options
+        static string tmpPath = @"./tmp/";
+
+        public static FileParser.TextElementCollection tCollection;
+        public static Action<string> collectHandler;
+        public static Action<string> replaceHandler;
+
+        // ---------------  options for collect ---------------  
+        [Verb("collect", HelpText = "Adds textelement and outputs csv")]
+        public class CollectOptions
         {
-            [Option('f', "force", HelpText = "Overrides dir, dose not output config file (config.csv)")]
-            public bool readOnly { get; set; }
+            [Option('t', "target-dir", Required = true, HelpText = "Target directory/file for reading; \nfileextension can also be .zip ")]
+            public string targetDirectory { get; set; }
 
-            [Option('C', "config-location", Default = "./config.csv", HelpText = "Location of intermediate configfile (default=config.csv)")]
+            [Option('c', "config-location", Default = "./config.csv", HelpText = "Location of intermediate configfile ")]
+            public string configLoc { get; set; }
+        }
+        // --------------- options for write --------------- 
+        [Verb("write", HelpText = "writes")]
+        public class WriteOptions
+        {
+            [Option('c', "config-location", Default = "./config.csv", HelpText = "Location of intermediate configfile; \nfileextension can also be .zip ")]
             public string configLoc { get; set; }
 
-            [Option('T', "target-directory", Default = "./", HelpText ="Target directory for copying, if directory dosent exist, it will copy it to that location")]
-            public string workingDirectory { get; set; }
+            [Option('s', "source-dir", HelpText = "Source directory for copying", Required = true)]
+            public string sourceDir { get; set; }
 
-            
-
-
+            [Option('o', "output-dir", HelpText = "Output directory for writing", Required = true)]
+            public string outputDir { get; set; }
         }
 
         static void Main(string[] args)
         {
-            
-            TextElementCollection t = new TextElementCollection();
-            Action<string> collectHandler = t.collectAll;
-            Action<string> replaceHandler = t.replaceAll;
-            
-            
+            tCollection = new TextElementCollection();
+            collectHandler = tCollection.collectAll;
+            replaceHandler = tCollection.replaceAll;
 
-
-            Console.In.ReadLine();
+            var result = Parser.Default.ParseArguments<CollectOptions, WriteOptions>(args) // has to be instance of class apperantly
+                  .WithParsed<CollectOptions>(options => collectBranch(options))
+                  .WithParsed<WriteOptions>(options => writeBranch(options))
+                  .WithNotParsed(_ => Console.WriteLine("ERROR Failed to parse"));
         }
 
 
-        // Represnts an AL-object //
-        public class TextElement
+
+
+        static void collectBranch(CollectOptions options)
         {
-            public String m_keyword;
-            public int m_objectNumber;
-            public String m_objectName;
+            Console.WriteLine(("[collect]", Directory.Exists(options.targetDirectory)));
 
-            public int new_objectNumber;
-            public String new_objectName;
+            FileInfo fi = new FileInfo(options.targetDirectory);
 
-            public Boolean m_usesQuotes;
-            public String m_path;
 
-            public TextElement(String keyword, int objectNumber, String objectName, String path)
+
+            if (Directory.Exists(options.targetDirectory))
             {
-                m_keyword = keyword;
-                m_objectNumber = objectNumber;
-                m_usesQuotes = objectName.StartsWith("\"");
-                m_objectName = objectName;
-                m_path = path;
-
-                new_objectNumber = newObjNum();
-                new_objectName = newObjName();
+                doForEachFile(options.targetDirectory, collectHandler);
+                tCollection.exportCSV(options.configLoc);
             }
-
-            public TextElement(String path, String keyword, int objectNumber, String objectName, int newObjNumber, String newObjName)
+            else if (new FileInfo(options.targetDirectory).Extension == ".rar" || new FileInfo(options.targetDirectory).Extension == ".zip")
             {
-                m_keyword = keyword;
-                m_objectNumber = objectNumber;
-                m_usesQuotes = objectName.StartsWith("\"");
-                m_objectName = objectName;
-                m_path = path;
-                new_objectName = newObjName;
-                new_objectNumber = newObjNumber;
-            }
-
-            public String newObjName() // returns objName with prefix
-            {
-                if (m_usesQuotes)
-                {
-                    return $"{prefix}{m_objectName.Substring(1, m_objectName.Length - 2)}";
-                }
-                else
-                {
-                    return $"{prefix}{m_objectName}";
-                }
-            }
-            public int newObjNum() // returns sum of objNum  nad shifting num
-            {
-                return shiftingNum + m_objectNumber;
+                Console.WriteLine("ddddd");
+                unzip(options.targetDirectory);
+                doForEachFile(tmpPath, collectHandler);
+                tCollection.exportCSV(options.configLoc);
+                //Directory.Delete(tmpPath, true);
             }
 
 
-            public void replace(string sDir)
-            {
-                string text = System.IO.File.ReadAllText(sDir);
-                // replace defenition
-                text = Regex.Replace(text, $"{m_keyword}\\s+{m_objectNumber}\\s+{m_objectName}", $"{m_keyword} {new_objectNumber} {new_objectName}");
 
-                // replace instantiation 
-                if (m_keyword == "table")
-                {
-                    text = Regex.Replace(text, $"Record\\s+{m_objectName}", $"Record {new_objectName}");
-                }
-                else
-                {
-                    text = Regex.Replace(text, $"{m_keyword}\\s+{m_objectName}", $"{m_keyword} {new_objectName}");
-                }
-                System.IO.File.WriteAllText(sDir, text);
-            }
-            // overload for == and != operator to compare TextElements
-            public static Boolean operator ==(TextElement a, TextElement b)
-                => a.m_keyword == b.m_keyword &&
-                a.m_objectNumber == b.m_objectNumber &&
-                a.m_objectName == b.m_objectName;
-            public static Boolean operator !=(TextElement a, TextElement b)
-                => !(a.m_keyword == b.m_keyword &&
-                a.m_objectNumber == b.m_objectNumber &&
-                a.m_objectName == b.m_objectName);
         }
-
-        //Class that represents a collection of text elements
-        public class TextElementCollection
+        static void writeBranch(WriteOptions options)
         {
-            List<TextElement> textElements = new List<TextElement>();
 
-            // collects all symbols and puts them into "textElements" //
-            public void collectAll(string sDir)
+            Console.WriteLine("[write]");
+            if (!File.Exists(options.configLoc)) // config is required to write
             {
-                String nText = File.ReadAllText(sDir);
-                for (Match match = Regex.Match(nText, "(?mx)^(\\w{1,30}) \\s+ (\\d{1,9}) \\s+ (\\w{1,30}|\\\"\\S{1,30}\\\") #Keyword ID ObjectName etc"); match.Success; match = match.NextMatch())
-                {
-                    TextElement matchedElement = new TextElement(match.Groups[1].ToString(), int.Parse(match.Groups[2].ToString()), match.Groups[3].ToString(), sDir);
-                    Boolean isADupe = false;
-                    foreach (TextElement elem in textElements)
-                    {
-                        if (matchedElement == elem)
-                        {
-                            isADupe = true;
-                            break;
-                        }
-                    }
-                    if (!isADupe)
-                    {
-                        textElements.Add(matchedElement);
-                    }
-                }
-            }
-
-            public void replaceAll(string sDir) // replaces all instances of old names and numbers with current versions, file at location.
-            {
-                foreach (TextElement textElement in textElements)
-                {
-                    textElement.replace(sDir);
-                }
+                Console.Error.WriteLine("ERROR Config file dosent exist.");
+                return;
             }
 
 
+            tCollection.importCSV(options.configLoc);
 
-            public void exportCSV(string sDir)
+
+            string source = options.sourceDir;
+            string output = options.outputDir;
+
+            if (!Directory.Exists(options.sourceDir))
             {
-                string CSV = $"Path, Keyword, ObjectNumber, Objectname ->, newObjectNumber, newObjectName";
-
-                foreach (TextElement textElement in textElements)
-                {
-                    CSV += $"\n{textElement.m_path}, {textElement.m_keyword}, {textElement.m_objectNumber}, {textElement.m_objectName}, {textElement.new_objectNumber}, {textElement.new_objectName}";
-                }
-                File.WriteAllText(sDir, CSV);
+                Console.Error.WriteLine("sourceDir is not a proper directory");
+                return;
+            }
+            if (new FileInfo(source).Extension == ".zip" || new FileInfo(source).Extension == ".rar") {
+                source = tmpPath;
             }
 
-            public void importCSV(String sDir)
+            if (new FileInfo(options.outputDir).Extension == ".zip" || new FileInfo(options.outputDir).Extension == ".rar")
             {
-                string CSV = File.ReadAllText(sDir);
-                String[] CSVArr = CSV.Split("\n");
-                textElements.Clear();
-                for (int i = 1; i < CSVArr.Length; i++)
-                {
-                    String[] rowArr = CSVArr[i].Split(",");
-                    if (rowArr.Length != 6) { break; }
-                    TextElement matchedElement = new TextElement(rowArr[0].Trim(' '), rowArr[1].Trim(' '), int.Parse(rowArr[2].Trim(' ')), rowArr[3].Trim(' '), int.Parse(rowArr[4].Trim(' ')), rowArr[5].Trim(' '));
-                    //(String path, String keyword, int objectNumber, String objectName, int newObjNumber, String newObjName)
-                    Boolean isADupe = false;
-                    foreach (TextElement elem in textElements)
-                    {
-                        if (matchedElement == elem)
-                        {
-                            isADupe = true;
-                            break;
-                        }
-                    }
-                    if (!isADupe)
-                    {
-                        textElements.Add(matchedElement);
-                    }
-                }
+                output = @".\tmp2";
+            }
+
+            DirectoryCopy(source, options.outputDir, true);
+            doForEachFile(options.outputDir, replaceHandler);
+
+            if (new FileInfo(options.outputDir).Extension == ".zip" || new FileInfo(options.outputDir).Extension == ".rar")
+            {
+                ZipFile.CreateFromDirectory(output, options.outputDir);
             }
         }
 
@@ -267,5 +189,13 @@ namespace RangeShifter
                 }
             }
         }
+        static void unzip(string inPath)
+        {
+            using (ZipArchive archive = ZipFile.OpenRead(inPath))
+            {
+                archive.ExtractToDirectory(tmpPath);
+            }
+        }
+
     }
 }
