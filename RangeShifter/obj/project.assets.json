@@ -43,19 +43,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Oleks\\.nuget\\packages\\": {}
+    "C:\\Users\\olekk\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\dev\\RangeShifter\\RangeShifter\\RangeShifter.csproj",
+      "projectUniqueName": "C:\\Dev\\RangeShifter\\RangeShifter\\RangeShifter.csproj",
       "projectName": "RangeShifter",
-      "projectPath": "C:\\dev\\RangeShifter\\RangeShifter\\RangeShifter.csproj",
-      "packagesPath": "C:\\Users\\Oleks\\.nuget\\packages\\",
-      "outputPath": "C:\\dev\\RangeShifter\\RangeShifter\\obj\\",
+      "projectPath": "C:\\Dev\\RangeShifter\\RangeShifter\\RangeShifter.csproj",
+      "packagesPath": "C:\\Users\\olekk\\.nuget\\packages\\",
+      "outputPath": "C:\\Dev\\RangeShifter\\RangeShifter\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Oleks\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\olekk\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -99,7 +99,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.202\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.201\\RuntimeIdentifierGraph.json"
       }
     }
   }

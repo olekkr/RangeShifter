@@ -15,7 +15,8 @@ namespace RangeShifter
         public static readonly int shiftingNum = 70443950;
         public static readonly string prefix = "BGo";
 
-        static string tmpPath = @"./tmp/";
+        static string unZipLoc = @"./tmp/zip/";
+        static string zipLoc = @"./tmp/unzip/";
 
         public static FileParser.TextElementCollection tCollection;
         public static Action<string> collectHandler;
@@ -28,7 +29,7 @@ namespace RangeShifter
             [Option('t', "target-dir", Required = true, HelpText = "Target directory/file for reading; \nfileextension can also be .zip ")]
             public string targetDirectory { get; set; }
 
-            [Option('c', "config-location", Default = "./config.csv", HelpText = "Location of intermediate configfile ")]
+            [Option('c', "config-location", Default = "./config.csv", HelpText = "Location of new intermediate configfile")]
             public string configLoc { get; set; }
         }
         // --------------- options for write --------------- 
@@ -66,8 +67,7 @@ namespace RangeShifter
 
             FileInfo fi = new FileInfo(options.targetDirectory);
 
-
-
+            
             if (Directory.Exists(options.targetDirectory))
             {
                 doForEachFile(options.targetDirectory, collectHandler);
@@ -77,7 +77,7 @@ namespace RangeShifter
             {
                 Console.WriteLine("ddddd");
                 unzip(options.targetDirectory);
-                doForEachFile(tmpPath, collectHandler);
+                doForEachFile(unZipLoc, collectHandler);
                 tCollection.exportCSV(options.configLoc);
                 //Directory.Delete(tmpPath, true);
             }
@@ -102,20 +102,16 @@ namespace RangeShifter
             string source = options.sourceDir;
             string output = options.outputDir;
 
-            if (!Directory.Exists(options.sourceDir))
-            {
-                Console.Error.WriteLine("sourceDir is not a proper directory");
-                return;
-            }
+            // sets source loc
             if (new FileInfo(source).Extension == ".zip" || new FileInfo(source).Extension == ".rar") {
-                source = tmpPath;
+                source = unZipLoc;
             }
-
+            // sets write loc
             if (new FileInfo(options.outputDir).Extension == ".zip" || new FileInfo(options.outputDir).Extension == ".rar")
             {
-                output = @".\tmp2";
+                output = zipLoc;
             }
-
+            
             DirectoryCopy(source, options.outputDir, true);
             doForEachFile(options.outputDir, replaceHandler);
 
@@ -123,6 +119,14 @@ namespace RangeShifter
             {
                 ZipFile.CreateFromDirectory(output, options.outputDir);
             }
+
+
+        }
+
+        static void wipe()
+        {
+
+
         }
 
         static void doForEachFile(string sDir, Action<String> func)
@@ -193,7 +197,7 @@ namespace RangeShifter
         {
             using (ZipArchive archive = ZipFile.OpenRead(inPath))
             {
-                archive.ExtractToDirectory(tmpPath);
+                archive.ExtractToDirectory(unZipLoc);
             }
         }
 

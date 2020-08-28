@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "GQB/O9LFFzBEC76X5DBavR2IkOEC2Si+vGG+0cFbyNFlgcGZPLjVIw92dlqoCMCo1JM6TRne1K17lAXmRYq7Yg==",
+  "dgSpecHash": "um6TuBLUn+uCzMhTLOaTgGEJ08Mmf8q9LBvl1ZeJD2hHU56GmMPAiSJ5Kr+LH0wCF2xj5dn4FDD+Wwqws1ddTw==",
   "success": true,
-  "projectFilePath": "C:\\dev\\RangeShifter\\RangeShifter\\RangeShifter.csproj",
+  "projectFilePath": "C:\\Dev\\RangeShifter\\RangeShifter\\RangeShifter.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Oleks\\.nuget\\packages\\commandlineparser\\2.8.0\\commandlineparser.2.8.0.nupkg.sha512"
+    "C:\\Users\\olekk\\.nuget\\packages\\commandlineparser\\2.8.0\\commandlineparser.2.8.0.nupkg.sha512"
   ],
   "logs": []
 }
