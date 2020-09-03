@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "um6TuBLUn+uCzMhTLOaTgGEJ08Mmf8q9LBvl1ZeJD2hHU56GmMPAiSJ5Kr+LH0wCF2xj5dn4FDD+Wwqws1ddTw==",
+  "dgSpecHash": "6iuQS5lpeSOxNtuZLZrQLK01ZFyYFzwlJtHXNX/AnziC+kaYUAH6TjW9jHKiKK/bkWrI0BkrcdiZymeqt897vQ==",
   "success": true,
-  "projectFilePath": "C:\\Dev\\RangeShifter\\RangeShifter\\RangeShifter.csproj",
+  "projectFilePath": "C:\\dev\\RangeShifter\\RangeShifter\\RangeShifter.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\olekk\\.nuget\\packages\\commandlineparser\\2.8.0\\commandlineparser.2.8.0.nupkg.sha512"
+    "C:\\Users\\Oleks\\.nuget\\packages\\commandlineparser\\2.8.0\\commandlineparser.2.8.0.nupkg.sha512",
+    "C:\\Users\\Oleks\\.nuget\\packages\\ilmerge\\3.0.41\\ilmerge.3.0.41.nupkg.sha512"
   ],
   "logs": []
 }

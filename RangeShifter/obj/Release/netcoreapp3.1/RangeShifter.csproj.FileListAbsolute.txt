@@ -1,0 +1,13 @@
+C:\dev\RangeShifter\RangeShifter\bin\Release\netcoreapp3.1\RangeShifter.exe
+C:\dev\RangeShifter\RangeShifter\bin\Release\netcoreapp3.1\RangeShifter.deps.json
+C:\dev\RangeShifter\RangeShifter\bin\Release\netcoreapp3.1\RangeShifter.runtimeconfig.json
+C:\dev\RangeShifter\RangeShifter\bin\Release\netcoreapp3.1\RangeShifter.runtimeconfig.dev.json
+C:\dev\RangeShifter\RangeShifter\bin\Release\netcoreapp3.1\RangeShifter.dll
+C:\dev\RangeShifter\RangeShifter\bin\Release\netcoreapp3.1\RangeShifter.pdb
+C:\dev\RangeShifter\RangeShifter\bin\Release\netcoreapp3.1\CommandLine.dll
+C:\dev\RangeShifter\RangeShifter\obj\Release\netcoreapp3.1\RangeShifter.AssemblyInfoInputs.cache
+C:\dev\RangeShifter\RangeShifter\obj\Release\netcoreapp3.1\RangeShifter.AssemblyInfo.cs
+C:\dev\RangeShifter\RangeShifter\obj\Release\netcoreapp3.1\RangeShifter.csproj.CopyComplete
+C:\dev\RangeShifter\RangeShifter\obj\Release\netcoreapp3.1\RangeShifter.dll
+C:\dev\RangeShifter\RangeShifter\obj\Release\netcoreapp3.1\RangeShifter.pdb
+C:\dev\RangeShifter\RangeShifter\obj\Release\netcoreapp3.1\RangeShifter.genruntimeconfig.cache

@@ -6,7 +6,7 @@ using System.Text.RegularExpressions;
 // Represnts an AL-object //
 namespace FileParser
 {
-	
+
 	public class TextElement
 	{
 		public String m_keyword;
@@ -26,7 +26,6 @@ namespace FileParser
 			m_usesQuotes = objectName.StartsWith("\"");
 			m_objectName = objectName;
 			m_path = path;
-
 			new_objectNumber = newObjNum();
 			new_objectName = newObjName();
 		}

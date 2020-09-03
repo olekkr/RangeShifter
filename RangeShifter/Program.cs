@@ -1,7 +1,7 @@
-﻿using System;
-using System.IO;
-using CommandLine;
+﻿using CommandLine;
 using FileParser;
+using System;
+using System.IO;
 using System.IO.Compression;
 
 
@@ -36,10 +36,10 @@ namespace RangeShifter
         [Verb("write", HelpText = "writes")]
         public class WriteOptions
         {
-            [Option('c', "config-location", Default = "./config.csv", HelpText = "Location of intermediate configfile; \nfileextension can also be .zip ")]
+            [Option('c', "config-location", Default = "./config.csv", HelpText = "Location of intermediate configfile")]
             public string configLoc { get; set; }
 
-            [Option('s', "source-dir", HelpText = "Source directory for copying", Required = true)]
+            [Option('s', "source-dir", HelpText = "Source directory for copying; can be a zip/rar", Required = true)]
             public string sourceDir { get; set; }
 
             [Option('o', "output-dir", HelpText = "Output directory for writing", Required = true)]
@@ -63,11 +63,11 @@ namespace RangeShifter
 
         static void collectBranch(CollectOptions options)
         {
-            Console.WriteLine(("[collect]", Directory.Exists(options.targetDirectory)));
+            Console.WriteLine("[collect]");
 
             FileInfo fi = new FileInfo(options.targetDirectory);
 
-            
+
             if (Directory.Exists(options.targetDirectory))
             {
                 doForEachFile(options.targetDirectory, collectHandler);
@@ -76,13 +76,12 @@ namespace RangeShifter
             else if (new FileInfo(options.targetDirectory).Extension == ".rar" || new FileInfo(options.targetDirectory).Extension == ".zip")
             {
                 Console.WriteLine("ddddd");
-                unzip(options.targetDirectory);
+                unzip(options.targetDirectory, unZipLoc);
                 doForEachFile(unZipLoc, collectHandler);
                 tCollection.exportCSV(options.configLoc);
-                //Directory.Delete(tmpPath, true);
             }
 
-
+            wipe();
 
         }
         static void writeBranch(WriteOptions options)
@@ -102,30 +101,45 @@ namespace RangeShifter
             string source = options.sourceDir;
             string output = options.outputDir;
 
-            // sets source loc
-            if (new FileInfo(source).Extension == ".zip" || new FileInfo(source).Extension == ".rar") {
-                source = unZipLoc;
+
+
+            if (Directory.Exists(source) || File.Exists(source))
+            {
+                // sets source loc
+                if (options.sourceDir.EndsWith(".zip") || options.sourceDir.EndsWith(".rar"))
+                {
+                    unzip(source, unZipLoc);
+                    source = unZipLoc;
+                }
             }
+            else
+            {
+                Console.Error.WriteLine("no zip or dir at " + source);
+                return;
+            }
+
             // sets write loc
-            if (new FileInfo(options.outputDir).Extension == ".zip" || new FileInfo(options.outputDir).Extension == ".rar")
+            if (options.outputDir.EndsWith(".zip") || options.outputDir.EndsWith(".rar"))
             {
-                output = zipLoc;
+                doForEachFile(source, replaceHandler);
+                zip(source, options.outputDir);
             }
-            
-            DirectoryCopy(source, options.outputDir, true);
-            doForEachFile(options.outputDir, replaceHandler);
-
-            if (new FileInfo(options.outputDir).Extension == ".zip" || new FileInfo(options.outputDir).Extension == ".rar")
+            else
             {
-                ZipFile.CreateFromDirectory(output, options.outputDir);
+                DirectoryCopy(source, output, true);
+                doForEachFile(options.outputDir, replaceHandler);
             }
 
-
+            wipe();
         }
 
         static void wipe()
         {
+            if (Directory.Exists("./tmp/"))
+            {
+                Directory.Delete("./tmp/", true);
 
+            }
 
         }
 
@@ -193,11 +207,16 @@ namespace RangeShifter
                 }
             }
         }
-        static void unzip(string inPath)
+
+        static void zip(string inPath, string outPath)
+        {
+            ZipFile.CreateFromDirectory(inPath, outPath);
+        }
+        static void unzip(string inPath, string outPath)
         {
             using (ZipArchive archive = ZipFile.OpenRead(inPath))
             {
-                archive.ExtractToDirectory(unZipLoc);
+                archive.ExtractToDirectory(outPath);
             }
         }
 

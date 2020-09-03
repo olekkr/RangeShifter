@@ -5,9 +5,25 @@
       "commandLineArgs": "collect -t ok.zip",
       "remoteDebugEnabled": false
     },
-    "test write": {
+    "write dir dir": {
       "commandName": "Project",
       "commandLineArgs": "write --source-dir=ok --output-dir=newfolder"
+    },
+    "write zip dir": {
+      "commandName": "Project",
+      "commandLineArgs": "write --source-dir=ok.zip --output-dir=newfolder"
+    },
+    "write zipzip": {
+      "commandName": "Project",
+      "commandLineArgs": "write --source-dir=ok.zip --output-dir=new.zip"
+    },
+    "wirte dir zip": {
+      "commandName": "Project",
+      "commandLineArgs": "write --source-dir=ok --output-dir=newzip.zip"
+    },
+    "collect dir": {
+      "commandName": "Project",
+      "commandLineArgs": "collect -t ok"
     }
   }
 }
