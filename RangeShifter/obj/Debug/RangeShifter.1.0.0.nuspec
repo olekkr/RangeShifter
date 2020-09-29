@@ -8,11 +8,14 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Package Description</description>
     <dependencies>
-      <group targetFramework=".NETCoreApp3.1" />
+      <group targetFramework=".NETCoreApp3.1">
+        <dependency id="CommandLineParser" version="2.8.0" exclude="Build,Analyzers" />
+        <dependency id="Costura.Fody" version="4.1.0" exclude="Build,Analyzers" />
+      </group>
     </dependencies>
   </metadata>
   <files>
-    <file src="C:\dev\RangeShifter\RangeShifter\bin\Debug\netcoreapp3.1\RangeShifter.runtimeconfig.json" target="lib\netcoreapp3.1\RangeShifter.runtimeconfig.json" />
-    <file src="C:\dev\RangeShifter\RangeShifter\bin\Debug\netcoreapp3.1\RangeShifter.dll" target="lib\netcoreapp3.1\RangeShifter.dll" />
+    <file src="C:\Dev\RangeShifter\RangeShifter\bin\Debug\netcoreapp3.1\RangeShifter.runtimeconfig.json" target="lib\netcoreapp3.1\RangeShifter.runtimeconfig.json" />
+    <file src="C:\Dev\RangeShifter\RangeShifter\bin\Debug\netcoreapp3.1\RangeShifter.dll" target="lib\netcoreapp3.1\RangeShifter.dll" />
   </files>
 </package>

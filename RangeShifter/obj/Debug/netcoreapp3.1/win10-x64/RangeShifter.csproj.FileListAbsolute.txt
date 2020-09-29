@@ -1,0 +1,16 @@
+C:\Dev\RangeShifter\RangeShifter\bin\Debug\netcoreapp3.1\win10-x64\RangeShifter.exe
+C:\Dev\RangeShifter\RangeShifter\bin\Debug\netcoreapp3.1\win10-x64\RangeShifter.deps.json
+C:\Dev\RangeShifter\RangeShifter\bin\Debug\netcoreapp3.1\win10-x64\RangeShifter.runtimeconfig.json
+C:\Dev\RangeShifter\RangeShifter\bin\Debug\netcoreapp3.1\win10-x64\RangeShifter.runtimeconfig.dev.json
+C:\Dev\RangeShifter\RangeShifter\bin\Debug\netcoreapp3.1\win10-x64\RangeShifter.dll
+C:\Dev\RangeShifter\RangeShifter\bin\Debug\netcoreapp3.1\win10-x64\RangeShifter.pdb
+C:\Dev\RangeShifter\RangeShifter\bin\Debug\netcoreapp3.1\win10-x64\SOS_README.md
+C:\Dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\win10-x64\RangeShifter.csprojAssemblyReference.cache
+C:\Dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\win10-x64\RangeShifter.csproj.CoreCompileInputs.cache
+C:\Dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\win10-x64\RangeShifter.AssemblyInfoInputs.cache
+C:\Dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\win10-x64\RangeShifter.AssemblyInfo.cs
+C:\Dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\win10-x64\RangeShifter.csproj.Fody.CopyLocal.cache
+C:\Dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\win10-x64\RangeShifter.csproj.CopyComplete
+C:\Dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\win10-x64\RangeShifter.dll
+C:\Dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\win10-x64\RangeShifter.pdb
+C:\Dev\RangeShifter\RangeShifter\obj\Debug\netcoreapp3.1\win10-x64\RangeShifter.genruntimeconfig.cache

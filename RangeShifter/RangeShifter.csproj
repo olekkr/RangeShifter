@@ -6,8 +6,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="CommandLine.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="CommandLine.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="CommandLineParser" Version="2.8.0" />
-    <PackageReference Include="ILMerge" Version="3.0.41" />
+    <PackageReference Include="Costura.Fody" Version="4.1.0" />
+    <PackageReference Include="Fody" Version="6.2.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
 </Project>

@@ -11,3 +11,5 @@ C:\dev\RangeShifter\RangeShifter\obj\Release\netcoreapp3.1\RangeShifter.csproj.C
 C:\dev\RangeShifter\RangeShifter\obj\Release\netcoreapp3.1\RangeShifter.dll
 C:\dev\RangeShifter\RangeShifter\obj\Release\netcoreapp3.1\RangeShifter.pdb
 C:\dev\RangeShifter\RangeShifter\obj\Release\netcoreapp3.1\RangeShifter.genruntimeconfig.cache
+C:\Dev\RangeShifter\RangeShifter\obj\Release\netcoreapp3.1\RangeShifter.csprojAssemblyReference.cache
+C:\Dev\RangeShifter\RangeShifter\obj\Release\netcoreapp3.1\RangeShifter.csproj.CoreCompileInputs.cache

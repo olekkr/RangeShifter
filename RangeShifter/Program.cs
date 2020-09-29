@@ -5,13 +5,12 @@ using System.IO;
 using System.IO.Compression;
 
 
-
 namespace RangeShifter
 {
-
-
     class Program
     {
+        public static AppDomain currentDomain = AppDomain.CurrentDomain;
+
         public static readonly int shiftingNum = 70443950;
         public static readonly string prefix = "BGo";
 
@@ -48,6 +47,7 @@ namespace RangeShifter
 
         static void Main(string[] args)
         {
+
             tCollection = new TextElementCollection();
             collectHandler = tCollection.collectAll;
             replaceHandler = tCollection.replaceAll;
@@ -219,6 +219,5 @@ namespace RangeShifter
                 archive.ExtractToDirectory(outPath);
             }
         }
-
     }
 }
